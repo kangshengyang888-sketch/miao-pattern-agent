@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>纹生·苗境｜AI智能体辅助苗族纹样创新生成</title>
+  <style>
+    :root{--bg:#090b0f;--panel:#12161d;--panel2:#181e27;--line:#2a313d;--text:#f3f0e9;--muted:#9ea7b3;--red:#d94a3d;--gold:#d9a441;--blue:#2d6ca2;--green:#2b8b73;--p1:#d94a3d;--p2:#d9a441;--p3:#2d6ca2;--p4:#f3f0e9;--glow:rgba(217,74,61,.38)}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 50% -20%,#25303d 0,#0c0f14 36%,#07090c 100%);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh}
+    button,select,input{font:inherit}.app{max-width:1500px;margin:auto;padding:22px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{display:flex;align-items:center;gap:14px}.seal{width:46px;height:46px;border:1px solid var(--red);display:grid;place-items:center;color:var(--red);font-family:serif;font-size:22px;transform:rotate(45deg)}.seal span{transform:rotate(-45deg)}h1{font-size:25px;letter-spacing:.12em;margin:0}.subtitle{color:var(--muted);font-size:12px;margin-top:5px}.status{font-size:12px;color:#b9c2cd;border:1px solid var(--line);border-radius:999px;padding:8px 12px}.dot{display:inline-block;width:7px;height:7px;background:#47cf93;border-radius:50%;margin-right:7px;box-shadow:0 0 9px #47cf93}
+    .layout{display:grid;grid-template-columns:300px minmax(430px,1fr) 320px;gap:14px}.panel{background:linear-gradient(155deg,rgba(24,30,39,.96),rgba(14,18,24,.96));border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.25);overflow:hidden}.panel-title{padding:16px 18px;border-bottom:1px solid var(--line);font-size:13px;letter-spacing:.14em;color:#d8dee7}.controls{padding:16px;max-height:720px;overflow:auto}.step{margin-bottom:20px}.step-head{display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:13px}.num{display:grid;place-items:center;width:23px;height:23px;border:1px solid #4a5666;border-radius:50%;font-size:11px;color:#d9e0e8}.options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.choice{border:1px solid #303946;background:#141a22;color:#bac3ce;border-radius:9px;padding:9px 7px;cursor:pointer;transition:.2s;text-align:center;font-size:12px}.choice:hover{border-color:#667384;color:white;transform:translateY(-1px)}.choice.active{border-color:var(--red);color:white;background:rgba(217,74,61,.13);box-shadow:0 0 0 1px rgba(217,74,61,.12) inset}.wide{grid-column:1/-1}.range-row{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin-top:9px}.range-row input{accent-color:var(--red);width:100%}
+    .actions{display:flex;gap:8px}.primary,.ghost{border-radius:9px;padding:10px 12px;cursor:pointer;border:1px solid var(--red)}.primary{background:var(--red);color:#fff;flex:1}.ghost{background:transparent;color:#d7dde5}.primary:hover{filter:brightness(1.1)}.ghost:hover{background:#222a35}
+    .stage-panel{position:relative;min-height:720px;display:flex;flex-direction:column}.stage-toolbar{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line)}.tabs{display:flex;gap:6px}.tab{background:none;border:0;color:var(--muted);padding:7px 11px;cursor:pointer;border-radius:7px}.tab.active{background:#29313d;color:white}.update-toast{font-size:11px;color:#60d8a2;opacity:0;transition:.25s}.update-toast.show{opacity:1}.canvas{position:relative;flex:1;min-height:600px;overflow:hidden;background:radial-gradient(circle at center,#1c2430,#0c1016 68%)}.canvas:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:30px 30px}.preview{position:absolute;inset:0;display:grid;place-items:center}.preview.hidden{display:none}.pattern-wrap{width:430px;height:430px;display:grid;place-items:center;transition:.35s}.pattern-wrap.flash{animation:flash .48s ease}.motif{width:110px;height:110px;filter:drop-shadow(0 0 10px var(--glow));transition:.3s}.motif *{transition:.3s}.layout-radial,.layout-mirror,.layout-band,.layout-single{position:relative;width:380px;height:380px}.unit{position:absolute;left:135px;top:135px;width:110px;height:110px;transition:.4s}.layout-single .unit{transform:scale(1.45)}.layout-mirror .unit:nth-child(1){transform:translateX(-70px) scale(1.15)}.layout-mirror .unit:nth-child(2){transform:translateX(70px) scaleX(-1) scale(1.15)}.layout-band{width:520px;height:180px}.layout-band .unit{top:35px}.layout-band .unit:nth-child(1){left:15px}.layout-band .unit:nth-child(2){left:115px}.layout-band .unit:nth-child(3){left:215px}.layout-band .unit:nth-child(4){left:315px}.layout-band .unit:nth-child(5){left:415px}.layout-radial .unit{transform-origin:55px 55px}.layout-radial .unit:nth-child(1){transform:translateY(-125px)}.layout-radial .unit:nth-child(2){transform:translate(108px,-63px) rotate(60deg)}.layout-radial .unit:nth-child(3){transform:translate(108px,63px) rotate(120deg)}.layout-radial .unit:nth-child(4){transform:translateY(125px) rotate(180deg)}.layout-radial .unit:nth-child(5){transform:translate(-108px,63px) rotate(240deg)}.layout-radial .unit:nth-child(6){transform:translate(-108px,-63px) rotate(300deg)}
+    @keyframes flash{0%{filter:brightness(1)}40%{filter:brightness(1.7) drop-shadow(0 0 22px var(--glow));transform:scale(1.035)}100%{filter:brightness(1);transform:scale(1)}}
+    .garment-scene{position:relative;width:520px;height:560px;display:grid;place-items:center;overflow:hidden;border-radius:18px}.garment{position:absolute;width:390px;height:490px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.45))}.camera-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:none;background:#05070a}.camera-on .camera-video{display:block}.camera-on .garment{display:none}.camera-on{box-shadow:0 0 0 1px #3e4a59,0 22px 50px rgba(0,0,0,.35)}.camera-on .garment-pattern{cursor:grab;touch-action:none}.camera-on .garment-pattern:active{cursor:grabbing}.camera-badge{position:absolute;left:14px;top:14px;z-index:5;background:rgba(8,10,14,.72);border:1px solid #445161;border-radius:999px;padding:6px 9px;font-size:10px;color:#d5dce4;display:none}.camera-on .camera-badge,.camera-on .camera-help{display:block}.camera-help{position:absolute;right:14px;top:14px;z-index:5;background:rgba(8,10,14,.72);border-radius:8px;padding:6px 9px;font-size:10px;color:#c5ced8;display:none}.motion-ring{position:absolute;width:190px;height:190px;border:1px solid var(--p1);border-radius:50%;opacity:0;pointer-events:none;z-index:1;transition:opacity .18s,transform .18s}.camera-on.motion .motion-ring{opacity:.48;transform:scale(1.14);box-shadow:0 0 35px var(--glow)}.garment-pattern{position:absolute;display:grid;place-items:center;transition:.45s;overflow:hidden;z-index:2}.garment-pattern .motif{width:100%;height:100%}.garment-pattern.chest{width:125px;height:125px;top:175px}.garment-pattern.collar{width:90px;height:70px;top:105px}.garment-pattern.hem{width:260px;height:75px;top:390px}.garment-pattern.sleeve{width:70px;height:150px;top:200px;left:74px}.garment-label{position:absolute;bottom:4px;color:var(--muted);font-size:11px;letter-spacing:.12em;z-index:5;text-shadow:0 1px 4px #000}
+    .agent-body{padding:17px}.agent-id{display:flex;gap:11px;align-items:center;margin-bottom:18px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from 25deg,var(--red),var(--gold),var(--blue),var(--red));box-shadow:0 0 22px var(--glow)}.agent-name{font-size:14px}.agent-role{font-size:10px;color:var(--muted);margin-top:4px}.message{background:#171e27;border:1px solid #2d3744;border-radius:12px 12px 12px 3px;padding:13px;margin-bottom:12px;font-size:12px;line-height:1.75;color:#d2d8df}.message strong{color:var(--gold)}.culture{border-left:2px solid var(--gold)}.apply-btn{width:100%;padding:9px;border:1px solid var(--gold);color:var(--gold);background:rgba(217,164,65,.08);border-radius:8px;cursor:pointer}.apply-btn:hover{background:rgba(217,164,65,.18)}.summary{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}.summary h3{font-size:11px;color:var(--muted);font-weight:normal;letter-spacing:.12em}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{font-size:10px;border:1px solid #374251;padding:5px 8px;border-radius:999px;color:#c0c8d1}
+    .log-panel{margin-top:14px}.log-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}.log-head button{border:0;background:none;color:var(--muted);cursor:pointer}.log-list{display:flex;gap:10px;padding:14px 18px;overflow:auto;min-height:72px}.log-item{white-space:nowrap;border-left:2px solid var(--red);background:#171d25;padding:8px 11px;font-size:11px;color:#bcc5d0}.empty{color:#687483;font-size:11px;padding:10px}.foot{text-align:center;color:#616d7a;font-size:10px;padding:18px}
+    @media(max-width:1050px){.layout{grid-template-columns:260px 1fr}.agent-panel{grid-column:1/-1}.agent-body{display:grid;grid-template-columns:220px 1fr 1fr;gap:14px}.summary{margin:0;padding:0;border:0}}@media(max-width:760px){.app{padding:10px}.layout{display:block}.panel{margin-bottom:10px}.stage-panel{min-height:620px}.canvas{min-height:520px}.pattern-wrap{transform:scale(.72)}.garment-scene{transform:scale(.75)}.agent-body{display:block}.topbar{align-items:flex-start}.status{display:none}h1{font-size:20px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+<div class="brand">
+<div class="seal">
+<span>纹</span>
+</div>
+<div>
+<h1>纹生·苗境</h1>
+<div class="subtitle">AI智能体辅助下的苗族传统纹样创新生成实验</div>
+</div>
+</div>
+<div class="status">
+<span class="dot">
+</span>MiaoPattern Agent 在线</div>
+</header>
+    <main class="layout">
+      <section class="panel">
+<div class="panel-title">共创控制台</div>
+<div class="controls">
+        <div class="step">
+<div class="step-head">
+<span class="num">1</span>选择纹样母题</div>
+<div class="options" id="patterns">
+<button class="choice active" data-value="butterfly">蝴蝶纹</button>
+<button class="choice" data-value="bird">鸟纹</button>
+<button class="choice" data-value="horn">牛角纹</button>
+<button class="choice" data-value="fish">鱼纹</button>
+</div>
+</div>
+        <div class="step">
+<div class="step-head">
+<span class="num">2</span>选择创新结构</div>
+<div class="options" id="layouts">
+<button class="choice active" data-value="single">几何简化</button>
+<button class="choice" data-value="mirror">镜像重组</button>
+<button class="choice" data-value="radial">放射生成</button>
+<button class="choice" data-value="band">连续排列</button>
+</div>
+<div class="range-row">纹样比例<input id="scale" type="range" min="70" max="135" value="100">
+<span id="scaleVal">100%</span>
+</div>
+</div>
+        <div class="step">
+<div class="step-head">
+<span class="num">3</span>选择配色语言</div>
+<div class="options" id="palettes">
+<button class="choice active" data-value="traditional">传统苗绣</button>
+<button class="choice" data-value="modern">现代雅灰</button>
+<button class="choice wide" data-value="future">未来数字</button>
+</div>
+</div>
+        <div class="step">
+<div class="step-head">
+<span class="num">4</span>时尚载体与位置</div>
+<div class="options" id="garments">
+<button class="choice active" data-value="top">数字上衣</button>
+<button class="choice" data-value="dress">现代裙装</button>
+<button class="choice" data-value="bag">虚拟包袋</button>
+<button class="choice" data-value="headwear">数字头饰</button>
+</div>
+<div class="options" id="positions" style="margin-top:7px">
+<button class="choice active" data-value="chest">中心</button>
+<button class="choice" data-value="collar">领部</button>
+<button class="choice" data-value="sleeve">侧部</button>
+<button class="choice" data-value="hem">下摆</button>
+</div>
+</div>
+        <div class="actions">
+<button class="primary" id="generate">重新生成</button>
+<button class="ghost" id="save">导出方案</button>
+</div>
+      </div>
+</section>
+      <section class="panel stage-panel">
+<div class="stage-toolbar">
+<div class="tabs">
+<button class="tab active" data-tab="pattern">纹样画布</button>
+<button class="tab" data-tab="garment">时尚应用</button>
+<button class="tab" id="cameraToggle">开启摄像头</button>
+</div>
+<span class="update-toast" id="toast">● 方案已更新</span>
+</div>
+<div class="canvas">
+        <div class="preview" id="patternPreview">
+<div class="pattern-wrap" id="patternWrap">
+<div id="patternLayout">
+</div>
+</div>
+</div>
+        <div class="preview hidden" id="garmentPreview">
+<div class="garment-scene" id="garmentScene">
+<video class="camera-video" id="cameraVideo" autoplay muted playsinline></video>
+<canvas id="motionCanvas" width="48" height="36" hidden></canvas>
+<div class="motion-ring"></div>
+<div class="camera-badge" id="cameraBadge">● CAMERA LIVE</div>
+<div class="camera-help">拖动纹样定位 · 移动身体触发光效</div>
+<svg class="garment" id="garmentSvg" viewBox="0 0 390 490" aria-label="数字服装轮廓">
+</svg>
+<div class="garment-pattern chest" id="garmentPattern">
+</div>
+<div class="garment-label" id="garmentLabel">数字上衣 · 中心纹样</div>
+</div>
+</div>
+      </div>
+</section>
+      <aside class="panel agent-panel">
+<div class="panel-title">AI 共创智能体</div>
+<div class="agent-body">
+<div class="agent-id">
+<div class="avatar">AI</div>
+<div>
+<div class="agent-name">苗纹共创助手</div>
+<div class="agent-role">CULTURE × DESIGN × AGENT</div>
+</div>
+</div>
+<div>
+<div class="message culture" id="culture">
+</div>
+<div class="message" id="advice">
+</div>
+<button class="apply-btn" id="applyAdvice">采用智能体建议</button>
+</div>
+<div class="summary">
+<h3>当前共创参数</h3>
+<div class="chips" id="chips">
+</div>
+</div>
+</div>
+</aside>
+    </main>
+    <section class="panel log-panel">
+<div class="log-head">
+<span>设计过程记录</span>
+<button id="clearLog">清除记录</button>
+</div>
+<div class="log-list" id="logList">
+<span class="empty">你的每一次设计选择将在这里形成可追溯的共创记录。</span>
+</div>
+</section>
+    <div class="foot">本原型用于《AI智能体辅助下的苗族传统纹样创新生成研究》设计实验 · 纹样释义需结合具体支系与文献进一步考证</div>
+  </div>
+  <script>
+    const data={
+      patterns:{butterfly:['蝴蝶纹','常与生命起源、繁衍及母性意象相关。不同地区和支系的具体解释存在差异。'],bird:['鸟纹','常关联自然崇拜、生命与迁徙记忆，是苗绣中富有动态感的母题。'],horn:['牛角纹','常与力量、祖先记忆和农耕生活相关，具有鲜明的几何轮廓。'],fish:['鱼纹','常被联系到生命繁衍、富足与水域生活，适合连续性构图。']},
+      layouts:{single:'几何简化',mirror:'镜像重组',radial:'放射生成',band:'连续排列'},palettes:{traditional:'传统苗绣',modern:'现代雅灰',future:'未来数字'},garments:{top:'数字上衣',dress:'现代裙装',bag:'虚拟包袋',headwear:'数字头饰'},positions:{chest:'中心',collar:'领部',sleeve:'侧部',hem:'下摆'}
+    };
+    const palettes={traditional:['#d94a3d','#d9a441','#2d6ca2','#f3f0e9'],modern:['#9d6b64','#c6b8a7','#657887','#eee9df'],future:['#00e5ff','#b45cff','#ff3cac','#dfffff']};
+    const state={pattern:'butterfly',layout:'single',palette:'traditional',garment:'top',position:'chest',scale:100,logs:[]};
+    const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+    function motif(type){const c=['var(--p1)','var(--p2)','var(--p3)','var(--p4)'];let inner='';
+      if(type==='butterfly')inner=`<path d="M50 52C18 8 3 25 21 55C4 70 20 96 49 62M60 52C92 8 107 25 89 55C106 70 90 96 61 62" fill="${c[0]}" stroke="${c[3]}" stroke-width="3"/>
+<circle cx="55" cy="56" r="7" fill="${c[1]}"/>
+<path d="M53 48L45 34M57 48L65 34" stroke="${c[2]}" stroke-width="4"/>`;
+      if(type==='bird')inner=`<path d="M13 61Q44 18 74 49Q90 42 101 51Q84 60 70 61Q48 92 21 79L37 62Z" fill="${c[2]}" stroke="${c[3]}" stroke-width="3"/>
+<path d="M40 58Q58 29 75 54Q55 65 40 58" fill="${c[0]}"/>
+<circle cx="81" cy="50" r="3" fill="${c[1]}"/>`;
+      if(type==='horn')inner=`<path d="M55 91V48M54 51C18 58 8 31 23 15C24 42 43 35 54 23M56 51C92 58 102 31 87 15C86 42 67 35 56 23" fill="none" stroke="${c[0]}" stroke-width="10" stroke-linecap="round"/>
+<path d="M34 72L55 92L76 72" fill="none" stroke="${c[1]}" stroke-width="7"/>`;
+      if(type==='fish')inner=`<path d="M17 55Q43 25 77 50L101 31L94 56L101 80L77 61Q42 91 17 55Z" fill="${c[2]}" stroke="${c[3]}" stroke-width="3"/>
+<path d="M39 43Q55 55 39 68" fill="none" stroke="${c[0]}" stroke-width="5"/>
+<circle cx="69" cy="50" r="4" fill="${c[1]}"/>`;
+      return `<svg class="motif" viewBox="0 0 110 110">${inner}</svg>`;
+    }
+    function renderPattern(){const count={single:1,mirror:2,radial:6,band:5}[state.layout];$('#patternLayout').className='layout-'+state.layout;$('#patternLayout').innerHTML=Array.from({length:count},()=>`<div class="unit">${motif(state.pattern)}</div>`).join('');$('#patternWrap').style.transform=`scale(${state.scale/100})`;$('#garmentPattern').innerHTML=motif(state.pattern);}
+    function garmentShape(){let s='';if(state.garment==='top')s=`<path d="M110 65L155 35Q195 60 235 35L280 65L355 140L305 205L270 170V455H120V170L85 205L35 140Z" fill="#252d38" stroke="#697687" stroke-width="3"/>
+<path d="M155 35Q195 105 235 35" fill="#0d1218" stroke="#697687" stroke-width="3"/>`;
+      if(state.garment==='dress')s=`<path d="M150 35Q195 68 240 35L255 155L342 455H48L135 155Z" fill="#252d38" stroke="#697687" stroke-width="3"/>
+<path d="M150 35Q195 92 240 35" fill="#0d1218" stroke="#697687" stroke-width="3"/>
+<path d="M135 155H255" stroke="#697687" stroke-width="3"/>`;
+      if(state.garment==='bag')s=`<path d="M70 150Q195 110 320 150L340 400Q195 445 50 400Z" fill="#252d38" stroke="#697687" stroke-width="3"/>
+<path d="M125 155Q125 50 195 50Q265 50 265 155" fill="none" stroke="#8b98a7" stroke-width="13"/>`;
+      if(state.garment==='headwear')s=`<path d="M85 300Q195 75 305 300Q195 370 85 300Z" fill="#252d38" stroke="#697687" stroke-width="3"/>
+<path d="M80 305Q195 380 310 305" fill="none" stroke="#8b98a7" stroke-width="10"/>
+<circle cx="195" cy="78" r="18" fill="#d9a441"/>`;
+      $('#garmentSvg').innerHTML=s;$('#garmentPattern').className='garment-pattern '+state.position;$('#garmentLabel').textContent=`${data.garments[state.garment]} · ${data.positions[state.position]}纹样`;}
+    function advice(){const name=data.patterns[state.pattern][0],lay=data.layouts[state.layout],pos=data.positions[state.position];let a=`你正在以<strong>${lay}</strong>处理${name}。`;
+      if(state.layout==='radial')a+='建议将重复数量控制在6个以内，以保持单元辨识度与视觉中心。';
+      else if(state.layout==='band')a+=`这种节奏适合${pos}装饰，建议保留适当留白，避免文化符号变成纯装饰噪声。`;
+      else if(state.layout==='mirror')a+='建议强化中心轴，并保留原始轮廓特征，使创新结果仍可追溯其母题。';
+      else a+='建议先保留最具识别度的轮廓，再逐步减少内部细节。';
+      if(state.palette==='future')a+=' 未来色彩对比强烈，可适当降低纹样密度。';return a;}
+    function update(logText){const p=palettes[state.palette];p.forEach((v,i)=>document.documentElement.style.setProperty('--p'+(i+1),v));document.documentElement.style.setProperty('--glow',p[0]+'66');renderPattern();garmentShape();$('#culture').innerHTML=`<strong>${data.patterns[state.pattern][0]}</strong>
+<br>${data.patterns[state.pattern][1]}`;$('#advice').innerHTML=advice();$('#chips').innerHTML=[data.patterns[state.pattern][0],data.layouts[state.layout],data.palettes[state.palette],data.garments[state.garment],data.positions[state.position]].map(x=>`<span class="chip">${x}</span>`).join('');$('#patternWrap').classList.remove('flash');void $('#patternWrap').offsetWidth;$('#patternWrap').classList.add('flash');$('#toast').classList.add('show');setTimeout(()=>$('#toast').classList.remove('show'),1300);if(logText)addLog(logText);}
+    function addLog(text){state.logs.push(text);$('#logList').innerHTML=state.logs.map((x,i)=>`<div class="log-item">${String(i+1).padStart(2,'0')} · ${x}</div>`).join('');}
+    function bind(group,key,labelMap){$$(`#${group} .choice`).forEach(btn=>btn.onclick=()=>{$$(`#${group} .choice`).forEach(x=>x.classList.remove('active'));btn.classList.add('active');state[key]=btn.dataset.value;update(`${labelMap[state[key]]}`);});}
+    bind('patterns','pattern',Object.fromEntries(Object.entries(data.patterns).map(([k,v])=>[k,'选择 '+v[0]])));bind('layouts','layout',Object.fromEntries(Object.entries(data.layouts).map(([k,v])=>[k,'结构 '+v])));bind('palettes','palette',Object.fromEntries(Object.entries(data.palettes).map(([k,v])=>[k,'配色 '+v])));bind('garments','garment',Object.fromEntries(Object.entries(data.garments).map(([k,v])=>[k,'载体 '+v])));bind('positions','position',Object.fromEntries(Object.entries(data.positions).map(([k,v])=>[k,'位置 '+v])));
+    $$('.tab[data-tab]').forEach(t=>t.onclick=()=>{$$('.tab[data-tab]').forEach(x=>x.classList.remove('active'));t.classList.add('active');$('#patternPreview').classList.toggle('hidden',t.dataset.tab!=='pattern');$('#garmentPreview').classList.toggle('hidden',t.dataset.tab!=='garment');});
+    $('#scale').oninput=e=>{state.scale=+e.target.value;$('#scaleVal').textContent=state.scale+'%';renderPattern()};$('#scale').onchange=()=>addLog('调整纹样比例 '+state.scale+'%');$('#generate').onclick=()=>update('重新生成当前方案');
+    $('#applyAdvice').onclick=()=>{if(state.layout==='radial'||state.palette==='future'){state.scale=85;$('#scale').value=85;$('#scaleVal').textContent='85%';}else{state.scale=110;$('#scale').value=110;$('#scaleVal').textContent='110%';}update('采用AI建议并优化比例');};
+    $('#clearLog').onclick=()=>{state.logs=[];$('#logList').innerHTML='<span class="empty">记录已清除，新的设计操作会继续出现在这里。</span>'};
+    $('#save').onclick=()=>{const report=`纹生·苗境｜AI辅助苗族纹样共创方案\n生成时间：${new Date().toLocaleString('zh-CN')}\n纹样母题：${data.patterns[state.pattern][0]}\n创新结构：${data.layouts[state.layout]}\n配色语言：${data.palettes[state.palette]}\n时尚载体：${data.garments[state.garment]}\n应用位置：${data.positions[state.position]}\n纹样比例：${state.scale}%\n\nAI设计建议：\n${$('#advice').textContent}\n\n设计过程：\n${state.logs.map((x,i)=>`${i+1}. ${x}`).join('\n')}`;const blob=new Blob([report],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='纹生苗境_共创方案.txt';a.click();URL.revokeObjectURL(a.href);addLog('导出设计方案');};
+    let cameraStream=null,motionTimer=null,lastFrame=null,dragging=false;
+    async function toggleCamera(){
+      if(cameraStream){stopCamera();return;}
+      if(!navigator.mediaDevices?.getUserMedia){alert('当前浏览器环境不支持摄像头。请使用 Chrome 或 Edge，并通过 localhost/HTTPS 打开。');return;}
+      try{
+        cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:720}},audio:false});
+        $('#cameraVideo').srcObject=cameraStream;$('#garmentScene').classList.add('camera-on');$('#cameraToggle').textContent='关闭摄像头';$('#cameraToggle').classList.add('active');
+        document.querySelector('.tab[data-tab="garment"]').click();addLog('开启摄像头虚拟试穿');startMotion();
+      }catch(err){const reason=err.name==='NotAllowedError'?'摄像头权限被拒绝，请在浏览器地址栏允许访问。':'无法开启摄像头：'+err.message;alert(reason);}
+    }
+    function stopCamera(){cameraStream?.getTracks().forEach(t=>t.stop());cameraStream=null;clearInterval(motionTimer);motionTimer=null;lastFrame=null;$('#cameraVideo').srcObject=null;$('#garmentScene').classList.remove('camera-on','motion');$('#cameraToggle').textContent='开启摄像头';$('#cameraToggle').classList.remove('active');addLog('关闭摄像头');}
+    function startMotion(){const video=$('#cameraVideo'),canvas=$('#motionCanvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});clearInterval(motionTimer);motionTimer=setInterval(()=>{if(video.readyState<2)return;ctx.drawImage(video,0,0,canvas.width,canvas.height);const now=ctx.getImageData(0,0,canvas.width,canvas.height).data;if(lastFrame){let diff=0;for(let i=0;i<now.length;i+=16)diff+=Math.abs(now[i]-lastFrame[i])+Math.abs(now[i+1]-lastFrame[i+1])+Math.abs(now[i+2]-lastFrame[i+2]);const moving=diff/(now.length/16)>32;$('#garmentScene').classList.toggle('motion',moving);}lastFrame=new Uint8ClampedArray(now);},180);}
+    $('#cameraToggle').onclick=toggleCamera;
+    const overlay=$('#garmentPattern'),scene=$('#garmentScene');
+    overlay.addEventListener('pointerdown',e=>{if(!cameraStream)return;dragging=true;overlay.setPointerCapture(e.pointerId);});
+    overlay.addEventListener('pointermove',e=>{if(!dragging)return;const r=scene.getBoundingClientRect(),w=overlay.offsetWidth,h=overlay.offsetHeight;overlay.style.left=Math.max(0,Math.min(r.width-w,e.clientX-r.left-w/2))+'px';overlay.style.top=Math.max(0,Math.min(r.height-h,e.clientY-r.top-h/2))+'px';});
+    overlay.addEventListener('pointerup',()=>{if(dragging)addLog('在摄像头画面中调整纹样位置');dragging=false;});
+    window.addEventListener('beforeunload',()=>cameraStream?.getTracks().forEach(t=>t.stop()));
+    update();
+  </script>
+</body>
+</html>
+
+
